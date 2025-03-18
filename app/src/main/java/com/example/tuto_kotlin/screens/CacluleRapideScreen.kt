@@ -45,8 +45,8 @@ import com.example.tuto_kotlin.ui.theme.TutokotlinTheme
 fun CalculeRapideScreen()
 {
     val operatorSign = listOf("+","-","x","/")
-    var number1 by remember{ mutableStateOf("") }
-    var number2 by remember{ mutableStateOf("") }
+    var number1 by remember{ mutableStateOf("0") }
+    var number2 by remember{ mutableStateOf("0") }
     var result by remember{ mutableStateOf("0") }
 
     Scaffold(
@@ -113,7 +113,7 @@ fun CalculeRapideScreen()
                     columns = GridCells.Fixed(4)
                 ) {
                     items(operatorSign.size){
-                        ButtonOperator(operatorSign[it],number1,number2)
+                        ButtonOperator(operatorSign[it],number1,number2, onResult = {result = it})
                     }
                 }
                 Spacer(Modifier.height(40.dp))
@@ -123,18 +123,19 @@ fun CalculeRapideScreen()
 }
 
 @Composable
-fun ButtonOperator(sign : String, number1 : String, number2 : String){
+fun ButtonOperator(sign : String, number1 : String, number2 : String,onResult: (String) -> Unit){
     Button(
         onClick = {
+            var result = "";
             if(sign == "+")
-                (number1.toDouble() + number2.toDouble()).toString()
+                result = (number1.toDouble() + number2.toDouble()).toString()
             if(sign == "-")
-                (number1.toDouble() - number2.toDouble()).toString()
+                result = (number1.toDouble() - number2.toDouble()).toString()
             if(sign == "x")
-                (number1.toDouble() * number2.toDouble()).toString()
+                result = (number1.toDouble() * number2.toDouble()).toString()
             if(sign == "/")
-                (number1.toDouble() / number2.toDouble()).toString()
-
+                result = (number1.toDouble() / number2.toDouble()).toString()
+            onResult(result)
         },
         modifier = Modifier.fillMaxWidth().height(60.dp).padding(horizontal = 5.dp),
         shape = RoundedCornerShape(15)
